@@ -23,10 +23,10 @@ monitors:
     expectStatus: 200
     followRedirect: false # should fetch follow redirects, default=false
     
-  - id: tjys-cf
+  - id: pan-qikaile-tk
     name: 云生网盘
     description: '云生的个人网盘'
-    url: 'https://tjys.cf/' 
+    url: 'https://pan.qikaile.tk/' 
     method: GET
     expectStatus: 200
    
@@ -35,11 +35,3 @@ monitors:
     url: 'https://box.tjys.ml/' 
     method: GET
     expectStatus: 200
-    
-  - id: leancloud-qikaile-workers-dev # unique identifier
-    name: leancloud
-    description: '唤醒你的LeanCloud' # default=empty
-    url: 'https://leancloud.qikaile.workers.dev/' # URL to fetch
-    method: GET # default=GET
-    expectStatus: 200 # operational status, default=200
-    followRedirect: false # should fetch follow redirects, default=false
