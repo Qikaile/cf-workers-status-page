@@ -7,37 +7,39 @@ settings:
 
   allmonitorsOperational: 'All Systems Operational'
   notAllmonitorsOperational: 'Not All Systems Operational'
-  monitorLabelOperational: 'Operational'
-  monitorLabelNotOperational: 'Not Operational'
-  monitorLabelNoData: 'No data'
-  dayInHistogramNoData: 'No data'
-  dayInHistogramOperational: 'All good'
+  monitorLabelOperational: '正常'
+  monitorLabelNotOperational: '故障'
+  monitorLabelNoData: '无数据'
+  dayInHistogramNoData: '无数据'
+  dayInHistogramOperational: '一切正常'
   dayInHistogramNotOperational: ' incident(s)' # xx incident(s) recorded
 
 monitors:
-  - id: blog-weilining-cf
-    name: 云生的博客
+  - id: www-qikaile-tk
+    name: 云生博客
+    description: '心静思远，志行千里。'
     url: 'https://www.qikaile.tk/' 
     method: GET
     expectStatus: 200
+    followRedirect: false # should fetch follow redirects, default=false
     
-  - id: workers-cloudflare-com # unique identifier
-    name: workers.cloudflare.com
-    description: 'You write code. They handle the rest.' # default=empty
-    url: 'https://workers.cloudflare.com/' # URL to fetch
+  - id: tjys-cf
+    name: 云生网盘
+    description: '云生的个人网盘'
+    url: 'https://tjys.cf/' 
+    method: GET
+    expectStatus: 200
+   
+  - id: box-tjys-ml
+    name: 云生网址导航
+    url: 'https://box.tjys.ml/' 
+    method: GET
+    expectStatus: 200
+    
+  - id: leancloud-qikaile-workers-dev # unique identifier
+    name: leancloud
+    description: '唤醒你的LeanCloud' # default=empty
+    url: 'https://leancloud.qikaile.workers.dev/' # URL to fetch
     method: GET # default=GET
     expectStatus: 200 # operational status, default=200
     followRedirect: false # should fetch follow redirects, default=false
-
-  - id: www-cloudflare-com
-    name: www.cloudflare.com
-    description: 'Built for anything connected to the Internet.'
-    url: 'https://www.cloudflare.com'
-    method: GET
-    expectStatus: 200
-
-  - id: blog-cloudflare-com
-    name: The Cloudflare Blog
-    url: 'https://blog.cloudflare.com/'
-    method: GET
-    expectStatus: 200
