@@ -1,53 +1,46 @@
-# Cloudflare Worker - Status Page
+# Cloudflare Worker-网站监控
 
-Monitor your websites, showcase status including daily history, and get Slack notification whenever your website status changes. Using **Cloudflare Workers**, **CRON Triggers,** and **KV storage**. Check [my status page](https://status-page.eidam.dev) out! 🚀
+## 前言
+监视您的网站，展示状态（包括每日历史记录），并在您的网站状态发生变化时获得Slack/Telegram/Discord通知。使用Cloudflare Workers，CRON触发器和KV存储。
 
-![Status Page](.gitbook/assets/status_page_screenshot.png)
+## 在线体验
+[网站监控网址：](https://cf-workers-status-page-production.qikaile.workers.dev/)
+![](https://cdn.jsdelivr.net/gh/Qikaile/cdn/img/status_page.png)
 
-![Slack notifications](.gitbook/assets/slack_screenshot.png)
+## 准备
+你需要一个cloudflare账号和GitHub 账号
 
-## Pre-requisites
+## 部署
+您可以使用GitHub Actions使用 **Cloudflare Deploy Button** 进行部署，也可以自行部署。
 
-You'll need a [Cloudflare Workers account](https://dash.cloudflare.com/sign-up/workers) with
-
-- A workers domain set up
-- The Workers Bundled subscription \($5/mo\)
-  - [It works with Workers Free!](https://blog.cloudflare.com/workers-kv-free-tier/) Check [more info](#workers-kv-free-tier) on how to run on Workers Free.
-- Some websites/APIs to watch 🙂
-
-Also, prepare the following secrets
-
-- Cloudflare API token with `Edit Cloudflare Workers` permissions
-- Slack incoming webhook \(optional\)
-- Discord incoming webhook \(optional\)
-
-## Getting started
-
-You can either deploy with **Cloudflare Deploy Button** using GitHub Actions or deploy on your own.
-
-### Deploy with Cloudflare Deploy Button
-
+### 使用Cloudflare部署按钮进行部署
 [![Deploy to Cloudflare Workers](https://camo.githubusercontent.com/1f3d0b4d44a2c3f12c78bd02bae907169430e04d728006db9f97a4befa64c886/68747470733a2f2f6465706c6f792e776f726b6572732e636c6f7564666c6172652e636f6d2f627574746f6e3f706169643d74727565)](https://deploy.workers.cloudflare.com/?url=https://github.com/eidam/cf-workers-status-page)
 
-1. Click the button and follow the instructions, you should end up with a clone of this repository
-2. Navigate to your new **GitHub repository &gt; Settings &gt; Secrets** and add the following secrets:
+1、单击按钮并按照说明进行操作，最后应得到此存储库的副本
 
-   ```yaml
-   - Name: CF_API_TOKEN (should be added automatically)
+2、导航到新的 **GitHub repository &gt; Settings &gt; Secrets** ，然后添加以下secrets
+```yaml
+- Name: CF_API_TOKEN (应该自动添加)
 
-   - Name: CF_ACCOUNT_ID (should be added automatically)
+- Name: CF_ACCOUNT_ID (应该自动添加)
 
-   - Name: SECRET_SLACK_WEBHOOK_URL (optional)
-   - Value: your-slack-webhook-url
+- Name: SECRET_SLACK_WEBHOOK_URL (可选的)
+- Value: your-slack-webhook-url
 
-   - Name: SECRET_DISCORD_WEBHOOK_URL (optional)
-   - Value: your-discord-webhook-url
-   ```
+- Name: SECRET_DISCORD_WEBHOOK_URL (可选的)
+- Value: your-discord-webhook-url
 
-3. Navigate to the **Actions** settings in your repository and enable them
-4. Edit [config.yaml](./config.yaml) to adjust configuration and list all of your websites/APIs you want to monitor
+```
+CF_API_TOKEN的获取：Token 选<font color=red>编辑 Cloudflare Workers</font>，区域资源包括所有区域，账号资源包括你自己账号。
+![](https://cdn.jsdelivr.net/gh/Qikaile/cdn/img/2021-02-25-01.png)
+![](https://cdn.jsdelivr.net/gh/Qikaile/cdn/img/2021-02-25-02.png)
+![](https://cdn.jsdelivr.net/gh/Qikaile/cdn/img/2021-02-25-03.png)
 
-   ```yaml
+3、导航到存储库中的 **Actions** 设置并启用它们
+
+4、编辑config.yaml以调整配置并列出要监视的所有网站/API
+
+ ```yaml
    settings:
      title: 'Status Page'
      url: 'https://status-page.eidam.dev' # used for Slack & Discord messages
@@ -76,50 +69,15 @@ You can either deploy with **Cloudflare Deploy Button** using GitHub Actions or 
        followRedirect: false # should fetch follow redirects, default=false
    ```
 
-5. Push to `main` branch to trigger the deployment
-6. 🎉
-7. _\(optional\)_ Go to [Cloudflare Workers settings](https://dash.cloudflare.com/?to=/workers) and assign custom domain/route
-   - e.g. `status-page.eidam.dev/*` _\(make sure you include `/*` as the Worker also serve static files\)_
-8. _\(optional\)_ Edit [wrangler.toml](./wrangler.toml) to adjust Worker settings or CRON Trigger schedule, especially if you are on [Workers Free plan](#workers-kv-free-tier)
+5、推送至main分支以触发部署
 
-### Telegram notifications
+6、🎉
 
-To enable telegram notifications, you'll need to take a few additional steps.
+7、（可选的）转到Cloudflare Workers设置并分配自定义域/路由
 
-1. [Create a new Bot](https://core.telegram.org/bots#creating-a-new-bot)
-2. Set the api token you received when creating the bot as content of the `SECRET_TELEGRAM_API_TOKEN` secret in your github repository.
-3. Send a message to the bot from the telegram account which should receive the alerts (Something more than `/start`)
-4. Get the chat id with `curl https://api.telegram.org/bot<YOUR TELEGRAM API TOKEN>/getUpdates | jq '.result[0] .message .chat .id'`
-5. Set the retrieved chat id in the `SECRET_TELEGRAM_CHAT_ID` secret variable
-6. Redeploy the status page using the github action
+例如status-page.eidam.dev/* （确保包括在内，/*因为Worker还提供静态文件）
 
-### Deploy on your own
+8、（可选的）编辑[wrangler.toml](./wrangler.toml)以调整Worker设置或CRON触发器计划，特别是如果您处于[Workers Free plan](#workers-kv-free-tier)中
 
-You can clone the repository yourself and use Wrangler CLI to develop/deploy, extra list of things you need to take care of:
-
-- create KV namespace and add the `KV_STATUS_PAGE` binding to [wrangler.toml](./wrangler.toml)
-- create Worker secrets _\(optional\)_
-  - `SECRET_SLACK_WEBHOOK_URL`
-  - `SECRET_DISCORD_WEBHOOK_URL`
-
-## Workers KV free tier
-
-The Workers Free plan includes limited KV usage, but the quota is sufficient for 2-minute checks only
-
-- Change the CRON trigger to 2 minutes interval (`crons = ["*/2 * * * *"]`) in [wrangler.toml](./wrangler.toml)
-
-## Known issues
-
-- **Max 25 monitors to watch in case you are using Slack notifications**, due to the limit of subrequests Cloudflare Worker can make \(50\).
-
-  The plan is to support up to 49 by sending only one Slack notification per scheduled run.
-
-- **KV replication lag** - You might get Slack notification instantly, however it may take couple of more seconds to see the change on your status page as [Cron Triggers are usually running on underutilized quiet hours machines](https://blog.cloudflare.com/introducing-cron-triggers-for-cloudflare-workers/#how-are-you-able-to-offer-this-feature-at-no-additional-cost).
-
-- **Initial delay (no data)** - It takes couple of minutes to schedule and run CRON Triggers for the first time
-
-## Future plans
-
-Stay tuned for more features coming in, like leveraging the fact that CRON instances are scheduled around the world during the day
-so we can monitor the response times. However, we will most probably wait for the [Durable Objects](https://blog.cloudflare.com/introducing-workers-durable-objects/) to be in open beta
-as they are better fit to reliably store such info.
+## 说明
+本项目是来自：https://github.com/eidam/cf-workers-status-page
