@@ -90,22 +90,12 @@ export default function Index({ config, kvMonitors, kvMonitorsLastUpdate }) {
         })}
         <div className="flex flex-row justify-between mt-4 text-sm">
           <div>
-            Powered by{' '}
-            <a href="https://workers.cloudflare.com/" target="_blank">
-              Cloudflare Workers{' '}
-            </a>
-            &{' '}
-            <a href="https://flareact.com/" target="_blank">
-              Flareact{' '}
+            Copyright © 2020 - 2021 <a href="https://github.com/Qikaile/cf-workers-status-page/" target="_blank">
+              墨明{' '}
             </a>
           </div>
           <div>
-            <a
-              href="https://github.com/eidam/cf-workers-status-page"
-              target="_blank"
-            >
-              Get Your Status Page
-            </a>
+              <a style="text-decoration:none;color:#000;padding-left:30px;background:url(https://cdn.jsdelivr.net/gh/Qikaile/cdn/img/logo_看图王.png) no-repeat left center" target="_blank" href="https://icp.gov.moe/?keyword=20200516" rel="noopener noreferrer">萌ICP备-20200516号</a>
           </div>
         </div>
       </div>
