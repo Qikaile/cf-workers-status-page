@@ -1,18 +1,18 @@
 settings:
-  title: 'Status Page'
+  title: '墨明网站状态监控'
   url: 'https://status-page.eidam.dev' # used for Slack messages
   logo: logo-192x192.png # image in ./public/ folder
   daysInHistogram: 90 # number of days you want to display in histogram
   collectResponseTimes: true # collects avg response times from CRON locations
 
-  allmonitorsOperational: 'All Systems Operational'
-  notAllmonitorsOperational: 'Not All Systems Operational'
+  allmonitorsOperational: '所有系统运行'
+  notAllmonitorsOperational: '部分系统故障'
   monitorLabelOperational: '正常'
   monitorLabelNotOperational: '故障'
   monitorLabelNoData: '无数据'
   dayInHistogramNoData: '无数据'
   dayInHistogramOperational: '一切正常'
-  dayInHistogramNotOperational: ' incident(s)' # xx incident(s) recorded
+  dayInHistogramNotOperational: ' 个故障' # xx incident(s) recorded
 
 monitors:
   - id: www-qikaile-tk
