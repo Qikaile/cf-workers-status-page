@@ -90,9 +90,9 @@ export default function Index({ config, kvMonitors, kvMonitorsLastUpdate }) {
         })}
         <div className="flex flex-row justify-between mt-4 text-sm">
           <div>
-            Powered by{' '}
-            <a href="https://workers.cloudflare.com/" target="_blank">
-              Cloudflare Workers{' '}
+            copyright © 2020 - 2021{' '}
+            <a href="/" target="_blank">
+              墨明{' '}
             </a>
           </div>
           <div>
@@ -100,7 +100,7 @@ export default function Index({ config, kvMonitors, kvMonitorsLastUpdate }) {
               href="https://github.com/qikaile/cf-workers-status-page"
               target="_blank"
             >
-              Get Your Status Page
+              本站使用 Status Page 作为主题
             </a>
           </div>
         </div>
